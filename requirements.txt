@@ -80,4 +80,4 @@ pygame
 protobuf==3.20.*
 altair==4
 cython==0.29.17
-numpy==1.17
+numpy==1.18
