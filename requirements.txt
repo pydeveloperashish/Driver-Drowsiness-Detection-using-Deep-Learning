@@ -78,6 +78,5 @@ opencv-python
 gradio
 pygame
 protobuf==3.20.*
-cython
 altair==4 
 numpy==1.18
