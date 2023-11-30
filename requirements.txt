@@ -34,6 +34,7 @@ mccabe==0.6.1
 nest-asyncio==1.5.6
 oauthlib==3.2.2
 opencv-python==4.7.0.68
+opencv-python-headless
 opt-einsum==3.3.0
 parso==0.8.3
 pexpect==4.8.0
