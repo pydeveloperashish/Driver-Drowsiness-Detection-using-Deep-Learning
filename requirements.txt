@@ -79,4 +79,5 @@ gradio
 pygame
 protobuf==3.20.*
 altair==4 
+cython
 numpy==1.18
