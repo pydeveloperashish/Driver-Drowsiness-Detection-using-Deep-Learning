@@ -79,6 +79,7 @@ gradio
 pygame
 streamlit==1.19.0
 protobuf==3.20.*
+cython
 numpy==1.18
 pandas==1.2.4
 altair==4 
