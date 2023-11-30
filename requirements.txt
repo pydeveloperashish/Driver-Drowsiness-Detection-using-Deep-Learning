@@ -80,4 +80,4 @@ pygame
 protobuf==3.20.*
 cython
 altair==4 
-opencv-python
+
