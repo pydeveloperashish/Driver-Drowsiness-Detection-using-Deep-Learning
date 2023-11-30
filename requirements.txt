@@ -32,7 +32,6 @@ MarkupSafe==2.1.2
 matplotlib-inline==0.1.6
 mccabe==0.6.1
 nest-asyncio==1.5.6
-numpy==1.19.5
 oauthlib==3.2.2
 opencv-python==4.7.0.68
 opt-einsum==3.3.0
