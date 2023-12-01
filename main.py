@@ -45,7 +45,7 @@ while(True):
         eye = eye.reshape(80,80,3)
         eye = np.expand_dims(eye,axis=0)
         prediction = model.predict(eye)
-        print(prediction)
+        # print(prediction)
        #Condition for Close
         if prediction[0][0]>0.30:
             cv2.putText(frame,"Closed",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)

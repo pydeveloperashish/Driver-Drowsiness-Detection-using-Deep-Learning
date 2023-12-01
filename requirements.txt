@@ -1,6 +1,6 @@
 
 Pillow
-tensorflow==2.5.0
+tensorflow==2.14.0
 streamlit==1.5.1
 opencv-python
 pygame
