@@ -6,12 +6,15 @@ from pygame import mixer
 import streamlit as st
 
 
-def drowsiness_detection(model_path, alarm_sound='alarm.wav'):
-    mixer.init()
-    sound = mixer.Sound('alarm.wav')
+mixer.init()
+sound = mixer.Sound('./alarm.wav')
 
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
+    
+
+def drowsiness_detection(model_path, alarm_sound='alarm.wav'):
+    
     model = load_model(os.path.join("models", "model.h5"))
 
 
