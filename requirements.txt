@@ -2,7 +2,7 @@
 Pillow
 tensorflow==2.5.0
 streamlit==1.5.1
-
 opencv-python
 pygame
 altair==4
+numpy==1.21
