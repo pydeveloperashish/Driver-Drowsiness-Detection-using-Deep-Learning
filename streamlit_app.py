@@ -2,6 +2,7 @@ import cv2
 import os
 from tensorflow.keras.models import load_model
 import numpy as np
+import pygame
 from pygame import mixer
 import streamlit as st
 
