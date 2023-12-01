@@ -1,4 +1,5 @@
 venv
 ./venv
 env
-models/*
+model.h5
+cnnCat2.h5
