@@ -7,14 +7,11 @@ from pygame import mixer
 import streamlit as st
 import streamlit as st
 
-# os.environ['SDL_AUDIODRIVER'] = 'dsp'
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
-# pygame.init()
-# mixer.init()
-# sound = mixer.Sound('./alarm.wav')
-
-audio_file = open('./alarm.wav', 'rb')
-audio_bytes = audio_file.read()
+pygame.init()
+mixer.init()
+sound = mixer.Sound('./alarm.wav')
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
@@ -63,8 +60,7 @@ def drowsiness_detection(model_path, alarm_sound='alarm.wav'):
                 #print("Close Eyes")
                 if(score > 20):
                     try:
-                        # sound.play()
-                        st.audio(audio_bytes, format="wav").play()
+                        sound.play()
                     except:  # isplaying = False
                         pass
 
