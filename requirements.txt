@@ -1,6 +1,8 @@
 
 Pillow
 tensorflow==2.14.0
+protobuf==3.20
 streamlit==1.5.1
 opencv-python
 pygame
+altair==4

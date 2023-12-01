@@ -8,97 +8,70 @@ import streamlit as st
 
 def drowsiness_detection(model_path, alarm_sound='alarm.wav'):
     mixer.init()
-    sound = mixer.Sound(alarm_sound)
+    sound = mixer.Sound('alarm.wav')
 
-    face_cascade = cv2.CascadeClassifier(os.path.join('haar_cascade_files', 'haarcascade_frontalface_alt.xml'))
-    leye_cascade = cv2.CascadeClassifier(os.path.join('haar_cascade_files', 'haarcascade_lefteye_2splits.xml'))
-    reye_cascade = cv2.CascadeClassifier(os.path.join('haar_cascade_files', 'haarcascade_righteye_2splits.xml'))
-    print(model_path)
-    model = load_model(model_path)
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
+    model = load_model(os.path.join("models", "model.h5"))
+
+
+    lbl=['Close', 'Open']
+
     path = os.getcwd()
     cap = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-    count = 0
     score = 0
-    thicc = 2
-    rpred=[99]
-    lpred=[99]
 
-    while True:
+    while(True):
         ret, frame = cap.read()
-        height, width = frame.shape[:2]
+        height,width = frame.shape[:2]
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        faces = face_cascade.detectMultiScale(gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
-        left_eye = leye_cascade.detectMultiScale(gray)
-        right_eye = reye_cascade.detectMultiScale(gray)
+        faces = face_cascade.detectMultiScale(gray,minNeighbors = 3,scaleFactor = 1.1,minSize=(25,25))
+        eyes = eye_cascade.detectMultiScale(gray,minNeighbors = 1,scaleFactor = 1.1)
 
-        cv2.rectangle(frame, (0, height-50), (200, height), (0, 0, 0), thickness=cv2.FILLED)
+        cv2.rectangle(frame, (0,height-50) , (200,height) , (0,0,0) , thickness=cv2.FILLED )
 
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (100, 100, 100), 1)
+        for (x,y,w,h) in faces:
+            cv2.rectangle(frame, (x,y) , (x+w,y+h) , (255,0,0) , 3 )
 
-        for (x, y, w, h) in right_eye:
-            r_eye = frame[y:y+h, x:x+w]
-            count += 1
-            r_eye = cv2.cvtColor(r_eye, cv2.COLOR_BGR2GRAY)
-            r_eye = cv2.resize(r_eye, (24, 24))
-            r_eye = r_eye / 255
-            r_eye = r_eye.reshape(24, 24, -1)
-            r_eye = np.expand_dims(r_eye, axis=0)
-            rpred = model.predict_classes(r_eye)
-            if rpred[0] == 1:
-                lbl = 'Open'
-            if rpred[0] == 0:
-                lbl = 'Closed'
-            break
+        for (x,y,w,h) in eyes:
 
-        for (x, y, w, h) in left_eye:
-            l_eye = frame[y:y+h, x:x+w]
-            count += 1
-            l_eye = cv2.cvtColor(l_eye, cv2.COLOR_BGR2GRAY)
-            l_eye = cv2.resize(l_eye, (24, 24))
-            l_eye = l_eye / 255
-            l_eye = l_eye.reshape(24, 24, -1)
-            l_eye = np.expand_dims(l_eye, axis=0)
-            lpred = model.predict_classes(l_eye)
-            if lpred[0] == 1:
-                lbl = 'Open'
-            if lpred[0] == 0:
-                lbl = 'Closed'
-            break
+            eye = frame[y:y+h,x:x+w]
+            #eye = cv2.cvtColor(eye,cv2.COLOR_BGR2GRAY)
+            eye = cv2.resize(eye,(80,80))
+            eye = eye/255
+            eye = eye.reshape(80,80,3)
+            eye = np.expand_dims(eye,axis=0)
+            prediction = model.predict(eye)
+            # print(prediction)
+        #Condition for Close
+            if prediction[0][0]>0.30:
+                cv2.putText(frame,"Closed",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+                cv2.putText(frame,'Score:'+str(score),(100,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+                score=score+1
+                #print("Close Eyes")
+                if(score > 20):
+                    try:
+                        sound.play()
+                    except:  # isplaying = False
+                        pass
 
-        if (rpred[0] == 0 and lpred[0] == 0):
-            score += 1
-            cv2.putText(frame, "Closed", (10, height-20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
-        else:
-            score -= 1
-            cv2.putText(frame, "Open", (10, height-20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+            #Condition for Open
+            elif prediction[0][1] > 0.70:
+                score = score - 1
+                if (score < 0):
+                    score = 0
+                cv2.putText(frame,"Open",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+                #print("Open Eyes")
+                cv2.putText(frame,'Score:'+str(score),(100,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
 
-        if score < 0:
-            score = 0
-        cv2.putText(frame, 'Score:'+str(score), (100, height-20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
-
-        if score > 15:
-            # Person is feeling sleepy so we beep the alarm
-            cv2.imwrite(os.path.join(path, 'image.jpg'), frame)
-            try:
-                sound.play()
-            except:
-                pass
-            if thicc < 16:
-                thicc += 2
-            else:
-                thicc -= 2
-                if thicc < 2:
-                    thicc = 2
-            cv2.rectangle(frame, (0, 0), (width, height), (0, 0, 255), thicc)
-
-        cv2.imshow('frame', frame)
+        cv2.imshow('frame',frame)
+    
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        
     cap.release()
     cv2.destroyAllWindows()
 
@@ -109,7 +82,7 @@ def main():
     
     # Click the button to start the webcam
     if st.button("Start Webcam"):
-        drowsiness_detection(model_path = os.path.join('models', 'cnnCat2.h5'))
+        drowsiness_detection(model_path = os.path.join('models', 'model.h5'))
         
 
 # Run the Streamlit app
