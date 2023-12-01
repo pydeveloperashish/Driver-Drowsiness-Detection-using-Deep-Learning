@@ -1,10 +1,4 @@
 ffmpeg 
 libsm6 
 libxext6
-alsa-base 
-alsa-utils
-ibSDL-1_2
-libSDL_devel
-libSDL_image-1_2
-libSDL_mixer-1_2
-libSDL_ttf-2
+libasound2-dev
