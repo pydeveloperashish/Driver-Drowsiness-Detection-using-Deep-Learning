@@ -64,7 +64,7 @@ def drowsiness_detection(model_path, alarm_sound='alarm.wav'):
                 if(score > 20):
                     try:
                         # sound.play()
-                        st.audio(audio_bytes, format="wav")
+                        st.audio(audio_bytes, format="wav").play()
                     except:  # isplaying = False
                         pass
 
