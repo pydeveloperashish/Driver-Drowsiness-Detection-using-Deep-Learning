@@ -5,7 +5,8 @@ import numpy as np
 from pygame import mixer
 import streamlit as st
 
-
+pygame.init()
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 mixer.init()
 sound = mixer.Sound('./alarm.wav')
 
