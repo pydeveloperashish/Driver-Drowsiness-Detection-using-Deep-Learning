@@ -28,7 +28,7 @@ jobs:
         script: |
           # Commands to deploy your code on the EC2 instance
           # For example:
-          cd /path/to/your/project
+          # cd /path/to/your/project
           git pull origin main
           # Any other deployment commands
 
