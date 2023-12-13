@@ -2,16 +2,9 @@ import cv2
 import os
 from tensorflow.keras.models import load_model
 import numpy as np
-import pygame
-from pygame import mixer
-import streamlit as st
 import streamlit as st
 
-os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
-pygame.init()
-mixer.init()
-sound = mixer.Sound('./alarm.wav')
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
